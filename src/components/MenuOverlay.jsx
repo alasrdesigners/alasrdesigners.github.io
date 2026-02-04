@@ -69,8 +69,8 @@ const MenuOverlay = ({ isOpen, onClose }) => {
                 <div ref={linksRef} style={styles.links}>
                     <a href="/" onClick={(e) => handleNavigation(e, 'home')} style={styles.link}>Home</a>
                     <Link to="/projects" onClick={onClose} style={styles.link}>Projects</Link>
-                    <a href="#about" onClick={(e) => handleNavigation(e, 'about')} style={styles.link}>About</a>
-                    <a href="#contact" onClick={(e) => handleNavigation(e, 'contact')} style={styles.link}>Contact</a>
+                    <Link to="/about" onClick={onClose} style={styles.link}>About</Link>
+                    <Link to="/contact" onClick={onClose} style={styles.link}>Contact</Link>
                 </div>
             </div>
         </div>

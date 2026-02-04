@@ -5,6 +5,8 @@ import Navbar from './components/Navbar';
 import Home from './pages/Home';
 import ProjectDetails from './pages/ProjectDetails';
 import Projects from './pages/Projects';
+import About from './pages/About';
+import Contact from './pages/Contact';
 
 // Helper to scroll to top on route change
 const ScrollToTop = () => {
@@ -50,6 +52,8 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/projects" element={<Projects />} />
         <Route path="/projects/:id" element={<ProjectDetails />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/contact" element={<Contact />} />
       </Routes>
     </Router>
   );

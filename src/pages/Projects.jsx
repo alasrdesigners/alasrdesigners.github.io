@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
+import Footer from '../components/Footer';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { galleryProjects } from '../data/gallery';
@@ -54,6 +55,7 @@ const Projects = () => {
                     ))}
                 </div>
             </div>
+            <Footer showContactInfo={false} />
         </main>
     );
 };
