@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from 'react';
+import { Link } from 'react-router-dom';
 import ProjectCard from './ProjectCard';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -46,6 +47,12 @@ const ProjectsGrid = () => {
                         <ProjectCard key={project.id} project={project} />
                     ))}
                 </div>
+
+                <div style={styles.viewMore}>
+                    <Link to="/projects" style={styles.link}>
+                        View All Projects
+                    </Link>
+                </div>
             </div>
         </section>
     );
@@ -79,6 +86,22 @@ const styles = {
         gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))',
         gap: '4rem',
         rowGap: '6rem'
+    },
+    viewMore: {
+        marginTop: '6rem',
+        textAlign: 'center'
+    },
+    link: {
+        display: 'inline-block',
+        padding: '1rem 3rem',
+        border: '1px solid var(--color-white)',
+        color: 'var(--color-white)',
+        textDecoration: 'none',
+        fontSize: '1.2rem',
+        textTransform: 'uppercase',
+        letterSpacing: '1px',
+        transition: 'all 0.3s ease',
+        borderRadius: '50px'
     }
 };
 

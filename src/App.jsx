@@ -4,6 +4,7 @@ import Lenis from 'lenis';
 import Navbar from './components/Navbar';
 import Home from './pages/Home';
 import ProjectDetails from './pages/ProjectDetails';
+import Projects from './pages/Projects';
 
 // Helper to scroll to top on route change
 const ScrollToTop = () => {
@@ -47,6 +48,7 @@ function App() {
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/projects" element={<Projects />} />
         <Route path="/projects/:id" element={<ProjectDetails />} />
       </Routes>
     </Router>

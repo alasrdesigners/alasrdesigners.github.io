@@ -1,177 +1,168 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useLayoutEffect, useRef } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import gsap from 'gsap';
-import { projects } from '../data/projects';
+import { galleryProjects } from '../data/gallery';
 
 const ProjectDetails = () => {
     const { id } = useParams();
-    const project = projects.find(p => p.id === parseInt(id));
-    const titleRef = useRef(null);
-    const textRef = useRef(null);
+    const project = galleryProjects.find(p => p.id === parseInt(id));
+    const containerRef = useRef(null);
     const imageRef = useRef(null);
+    const contentRef = useRef(null);
 
-    useEffect(() => {
-        window.scrollTo(0, 0); // Ensure page starts at top
+    useLayoutEffect(() => {
+        const ctx = gsap.context(() => {
+            const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
 
-        const tl = gsap.timeline();
+            tl.from(imageRef.current, {
+                y: 100,
+                opacity: 0,
+                duration: 1.2
+            })
+                .from(contentRef.current.children, {
+                    y: 50,
+                    opacity: 0,
+                    duration: 0.8,
+                    stagger: 0.1
+                }, '-=0.6');
 
-        tl.fromTo(imageRef.current,
-            { scale: 1.1, opacity: 0 },
-            { scale: 1, opacity: 1, duration: 1.5, ease: 'power3.out' }
-        )
-            .fromTo(titleRef.current,
-                { y: 50, opacity: 0 },
-                { y: 0, opacity: 1, duration: 1, ease: 'power3.out' },
-                '-=1'
-            )
-            .fromTo(textRef.current,
-                { y: 30, opacity: 0 },
-                { y: 0, opacity: 1, duration: 1, ease: 'power3.out' },
-                '-=0.8'
-            );
+        }, containerRef);
 
+        return () => ctx.revert();
     }, [id]);
 
     if (!project) {
-        return <div style={{ color: 'white', padding: '10rem', textAlign: 'center' }}>Project not found</div>;
+        return (
+            <div style={styles.errorContainer}>
+                <h2>Project not found</h2>
+                <Link to="/projects" style={styles.backLink}>Back to Projects</Link>
+            </div>
+        );
     }
 
-    const nextProjectId = project.id === projects.length ? 1 : project.id + 1;
-
     return (
-        <div style={styles.page}>
-            <div style={styles.heroWrapper}>
-                <img
-                    ref={imageRef}
-                    src={project.image}
-                    alt={project.title}
-                    style={styles.heroImage}
-                />
-                <div style={styles.overlay}></div>
-            </div>
+        <main style={styles.main} ref={containerRef}>
+            <div style={styles.container}>
+                <Link to="/projects" style={styles.backLink}>
+                    ← Back to Projects
+                </Link>
 
-            <div className="container" style={styles.container}>
-                <div style={styles.header}>
-                    <p style={styles.category}>{project.category}</p>
-                    <h1 ref={titleRef} style={styles.title}>{project.title}</h1>
-                </div>
+                <div style={styles.contentWrapper}>
+                    <div style={styles.imageWrapper}>
+                        <img
+                            ref={imageRef}
+                            src={project.image}
+                            alt={project.title}
+                            style={styles.image}
+                        />
+                    </div>
 
-                <div style={styles.content}>
-                    <div ref={textRef} style={styles.description}>
-                        <p style={styles.text}>{project.description}</p>
+                    <div style={styles.details} ref={contentRef}>
+                        <h1 style={styles.title}>{project.title}</h1>
+                        <p style={styles.description}>{project.description}</p>
 
-                        <div style={styles.meta}>
-                            <div style={styles.metaItem}>
-                                <span style={styles.label}>Location</span>
-                                <span>{project.location}</span>
+                        <div style={styles.specs}>
+                            <div style={styles.specItem}>
+                                <span style={styles.specLabel}>Client</span>
+                                <span style={styles.specValue}>Private Client</span>
                             </div>
-                            <div style={styles.metaItem}>
-                                <span style={styles.label}>Year</span>
-                                <span>{project.year}</span>
+                            <div style={styles.specItem}>
+                                <span style={styles.specLabel}>Year</span>
+                                <span style={styles.specValue}>2024</span>
+                            </div>
+                            <div style={styles.specItem}>
+                                <span style={styles.specLabel}>Location</span>
+                                <span style={styles.specValue}>Kashmir</span>
                             </div>
                         </div>
                     </div>
                 </div>
-
-                <div style={styles.navigation}>
-                    <Link to={`/projects/${nextProjectId}`} style={styles.nextLink}>
-                        Next Project <span style={{ fontSize: '1.5em' }}>→</span>
-                    </Link>
-                </div>
             </div>
-        </div>
+        </main>
     );
 };
 
 const styles = {
-    page: {
+    main: {
+        paddingTop: '120px',
         minHeight: '100vh',
         backgroundColor: 'var(--color-bg)',
-        color: 'var(--color-white)',
-        paddingBottom: '4rem'
-    },
-    heroWrapper: {
-        position: 'relative',
-        width: '100%',
-        height: '60vh',
-        overflow: 'hidden'
-    },
-    heroImage: {
-        width: '100%',
-        height: '100%',
-        objectFit: 'cover'
-    },
-    overlay: {
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        width: '100%',
-        height: '100%',
-        background: 'linear-gradient(to bottom, rgba(0,0,0,0.2), var(--color-bg))'
+        color: 'var(--color-white)'
     },
     container: {
-        maxWidth: '1200px',
+        maxWidth: '1400px',
         margin: '0 auto',
-        padding: '0 var(--spacing-container)',
-        position: 'relative',
-        top: '-100px' // Overlap hero
+        padding: '0 var(--spacing-container)'
     },
-    header: {
-        marginBottom: '4rem'
+    errorContainer: {
+        paddingTop: '150px',
+        textAlign: 'center',
+        color: 'var(--color-white)'
     },
-    category: {
-        color: 'var(--color-primary)',
-        textTransform: 'uppercase',
-        letterSpacing: '2px',
-        marginBottom: '1rem'
+    backLink: {
+        display: 'inline-block',
+        color: 'var(--color-secondary)',
+        textDecoration: 'none',
+        marginBottom: '2rem',
+        fontSize: '1.1rem',
+        transition: 'color 0.3s ease'
+    },
+    contentWrapper: {
+        display: 'grid',
+        gridTemplateColumns: '1fr 1fr',
+        gap: '4rem',
+        alignItems: 'start',
+        paddingBottom: '4rem',
+        '@media (max-width: 900px)': {
+            gridTemplateColumns: '1fr'
+        }
+    },
+    imageWrapper: {
+        width: '100%',
+        borderRadius: '12px',
+        overflow: 'hidden',
+        boxShadow: '0 20px 40px rgba(0,0,0,0.3)'
+    },
+    image: {
+        width: '100%',
+        height: 'auto',
+        display: 'block'
+    },
+    details: {
+        paddingTop: '2rem'
     },
     title: {
-        fontSize: 'clamp(3rem, 6vw, 5rem)',
-        fontFamily: 'var(--font-heading)',
-        lineHeight: '1.1'
-    },
-    content: {
-        display: 'grid',
-        gridTemplateColumns: '1fr',
-        gap: '4rem'
+        fontSize: 'clamp(2.5rem, 4vw, 3.5rem)',
+        lineHeight: '1.1',
+        marginBottom: '1.5rem',
+        fontFamily: 'var(--font-heading)'
     },
     description: {
-        maxWidth: '800px'
-    },
-    text: {
-        fontSize: '1.25rem',
+        fontSize: '1.1rem',
         lineHeight: '1.8',
-        color: 'var(--color-secondary)',
+        color: 'var(--color-gray)',
         marginBottom: '3rem'
     },
-    meta: {
-        display: 'flex',
-        gap: '4rem',
+    specs: {
+        display: 'grid',
+        gap: '1.5rem',
         borderTop: '1px solid rgba(255,255,255,0.1)',
         paddingTop: '2rem'
     },
-    metaItem: {
+    specItem: {
         display: 'flex',
-        flexDirection: 'column',
-        gap: '0.5rem'
+        justifyContent: 'space-between',
+        alignItems: 'center'
     },
-    label: {
-        color: 'var(--color-primary)',
+    specLabel: {
+        color: 'var(--color-secondary)',
         fontSize: '0.9rem',
-        textTransform: 'uppercase'
+        textTransform: 'uppercase',
+        letterSpacing: '1px'
     },
-    navigation: {
-        marginTop: '8rem',
-        textAlign: 'right'
-    },
-    nextLink: {
-        display: 'inline-flex',
-        alignItems: 'center',
-        gap: '1rem',
-        fontSize: '2rem',
+    specValue: {
         color: 'var(--color-white)',
-        textDecoration: 'none',
-        fontFamily: 'var(--font-heading)'
+        fontSize: '1.1rem'
     }
 };
 
