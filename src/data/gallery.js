@@ -7,7 +7,7 @@ import img6 from '../assets/projects/37135.jpg';
 import img7 from '../assets/projects/37137.jpg';
 import img8 from '../assets/projects/37139.jpg';
 import img9 from '../assets/projects/37141.jpg';
-import img10 from '../assets/projects/37143.jpg';
+
 
 export const galleryProjects = [
     {
@@ -64,10 +64,5 @@ export const galleryProjects = [
         title: 'Suburban Family Home',
         description: 'Spacious family residence with emphasis on community and privacy.'
     },
-    {
-        id: 110,
-        image: img10,
-        title: 'Industrial Loft',
-        description: 'Adaptive reuse project transforming a warehouse into a chic loft.'
-    },
+
 ];
